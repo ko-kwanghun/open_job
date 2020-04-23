@@ -1,0 +1,52 @@
+@CHARSET "UTF-8";
+/* 20160720追加 */
+._error {
+	color: red;
+	margin-top: 10px;
+}
+
+
+
+.pagination>li.current {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+
+    text-decoration: none;
+    z-index: 3;
+    color: #fff;
+    cursor: default;
+    background-color: #337ab7;
+    border-color: #337ab7;
+    border:1px solid #337ab7;
+}
+
+.pagination>li.next {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.pagination>li.prev {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-right: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}

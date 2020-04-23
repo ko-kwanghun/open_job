@@ -1,0 +1,386 @@
+SET SESSION FOREIGN_KEY_CHECKS=0;
+
+
+/* Create Tables */
+
+CREATE TABLE T_CONFIGURE
+(
+	CON_ID int NOT NULL AUTO_INCREMENT COMMENT '環境設定ID',
+	NAME varchar(255) NOT NULL COMMENT '名前',
+	VALUE text NOT NULL COMMENT '値',
+	PRIMARY KEY (CON_ID)
+) COMMENT = '環境設定情報' DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
+
+CREATE TABLE `tblmembers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '利用者ID',
+  `user_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '利用者名',
+  `user_passwd` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'パスワード',
+  `user_birth` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '生年月日',
+  `user_hp` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '携帯電話番号',
+  `user_email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'メールアドレス',
+  `user_job` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '職業',
+  `tblcompanys_id` int(11) DEFAULT NULL COMMENT '出版社番号',
+  `user_stat` char(1) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'ログイン可否',
+  `created` datetime NOT NULL COMMENT '登録日',
+  `updated` datetime NOT NULL COMMENT '更新日',
+  `user_kind` char(5) COLLATE utf8_unicode_ci NOT NULL COMMENT '利用者タイプ',
+  `last_login_ip` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '最終ログインＩＰ',
+  `last_login_date` datetime DEFAULT NULL COMMENT '最終ログイン時刻',
+  `etc` text COLLATE utf8_unicode_ci COMMENT 'その他',
+  `start_dt` date DEFAULT NULL COMMENT '貸出期間開始',
+  `end_dt` date DEFAULT NULL COMMENT '貸出期間終了',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='コンテンツ情報'
+
+
+CREATE TABLE `tblbanners` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'バナー番号',
+  `banner_kind` char(1) COLLATE utf8_unicode_ci NOT NULL COMMENT 'バナー種類',
+  `banner_img` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'バナーイメージ',
+  `banner_alt` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'バナー説明',
+  `banner_link` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'バナーリンク',
+  `banner_state` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'バナー使用可否',
+  `image_type` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'イメージタイプ',
+  `image_size` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'イメージサイズ',
+  `created` datetime NOT NULL COMMENT '登録日',
+  `updated` datetime NOT NULL COMMENT '更新日',
+  `del_flag` tinyint(1) DEFAULT NULL COMMENT '削除プラグ',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='バナー情報';
+
+
+CREATE TABLE `tblcatebestviews` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `display_flag` char(1) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='カテゴリベストー基本使用無';
+
+
+CREATE TABLE `tblcategoryrelcontents` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `tblcontents_id` int(11) NOT NULL COMMENT 'コンテンツ番号',
+  `tblcategory_id` int(11) NOT NULL COMMENT 'カテゴリー番号',
+  `category_path` varchar(255) NOT NULL COMMENT 'カテゴリー経路',
+  `created` datetime NOT NULL COMMENT '登録日',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='カテゴリー別のコンテンツリレージョン';
+
+
+CREATE TABLE `tblcategorys` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'カテゴリー連番',
+  `category_cd` varchar(11) COLLATE utf8_unicode_ci NOT NULL COMMENT 'カテゴリコート',
+  `category_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'カテゴリ名',
+  `category_path` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'カテゴリ経路',
+  `category_depth` int(11) NOT NULL COMMENT 'カテゴリ断層',
+  `reg_dt` datetime NOT NULL COMMENT '登録日',
+  `last_update` datetime NOT NULL COMMENT '更新日',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='カテゴリ情報';
+
+
+CREATE TABLE `tblcmsconfigs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_kind` varchar(3) COLLATE utf8_unicode_ci NOT NULL COMMENT '利用者区分',
+  `max_lend` varchar(4) COLLATE utf8_unicode_ci NOT NULL COMMENT '利用者別の最大貸出件数',
+  `max_reserve` varchar(4) COLLATE utf8_unicode_ci NOT NULL COMMENT '個人別最大予約件数',
+  `lend_term` varchar(4) COLLATE utf8_unicode_ci NOT NULL COMMENT '貸出期間',
+  `max_extention` varchar(4) COLLATE utf8_unicode_ci NOT NULL COMMENT '最大貸出延長回数',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='利用者貸出、予約冊数の設定';
+
+
+CREATE TABLE `tblcompanys` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_cd` int(4) NOT NULL COMMENT '出版社コード',
+  `company_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '出版社名',
+  `company_tag` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '出版社ひらがな',
+  `company_url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '出版社URL',
+  `company_addr` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '出版社アドレス',
+  `company_tel` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '出版社電話番号',
+  `company_fax` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '出版社鵜ファックス',
+  `etc` tinytext COLLATE utf8_unicode_ci COMMENT 'ETC',
+  `pr_use` char(1) COLLATE utf8_unicode_ci NOT NULL COMMENT 'PRページ使用可否',
+  `created` datetime NOT NULL COMMENT '登録日',
+  `updated` datetime NOT NULL COMMENT '更新日',
+  `best_company` char(1) COLLATE utf8_unicode_ci NOT NULL COMMENT 'TOPページ反映可否',
+  `book_copy` int(3) NOT NULL DEFAULT '3' COMMENT 'コンテンツライセンス数',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='出版社情報';
+
+
+CREATE TABLE `tblconfig_copys` (
+  `copy_no` int(11) NOT NULL AUTO_INCREMENT,
+  `copy_view_type` char(2) COLLATE utf8_unicode_ci NOT NULL COMMENT 'コピーライトタイプ',
+  `copy_img` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'コピーライトイメージ',
+  `copy_text` text COLLATE utf8_unicode_ci COMMENT 'コピーライトテキスト',
+  `font_color` varchar(50) COLLATE utf8_unicode_ci DEFAULT '#333' COMMENT 'フォント色',
+  `bg_color` varchar(50) COLLATE utf8_unicode_ci DEFAULT '#fff' COMMENT '背景色',
+  `font_size` int(4) DEFAULT '8' COMMENT 'フォントサイズ',
+  `text_align` char(2) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'sort方式',
+  `created` datetime DEFAULT NULL COMMENT '登録日',
+  `uddated` datetime DEFAULT NULL COMMENT '更新日',
+  `opdt` char(2) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`copy_no`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='コピーライト情報';
+
+
+CREATE TABLE `tblconfig_logo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mail_logo` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'メインロゴ',
+  `sub_logo` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'サブロゴ',
+  `mainimg_filename` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'メインイメージ',
+  `pr_view` char(1) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'メイン prタブビュー(1:view -2:hide)',
+  `created` datetime NOT NULL COMMENT '登録日',
+  `updated` datetime NOT NULL COMMENT '更新日',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='ロゴタイトル情報';
+
+
+CREATE TABLE `tblcontents` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `contents_id` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'コンテンツID',
+  `contents_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'コンテンツ名（漢字）',
+  `contents_tag` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'コンテンツ名（ひらがな）',
+  `contents_writer` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '著者',
+  `writer_tag` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '著者名（ひらがな）',
+  `contents_public` int(11) DEFAULT NULL COMMENT '出版社固有番号',
+  `contents_image` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'カーバーイメージ',
+  `contents_image2` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'コンテンツ原本イメージ',
+  `contents_detail` text COLLATE utf8_unicode_ci COMMENT 'コンテンツ詳細説明',
+  `contents_print_date` date DEFAULT NULL COMMENT 'コンテンツ出版日',
+  `contents_player` int(1) NOT NULL COMMENT 'コンテンツプレーヤー 種類',
+  `contents_kind` int(1) NOT NULL COMMENT 'コンテンツ種類',
+  `contents_type` int(1) NOT NULL COMMENT 'コンテンツタイプ',
+  `book_copy` int(11) DEFAULT NULL COMMENT 'COPY数',
+  `book_reserve` int(11) DEFAULT NULL COMMENT '図書別最大の予約者数',
+  `contents_url` int(11) DEFAULT NULL COMMENT 'コンテンツURL',
+  `Wek_url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `Wek_url1` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `external_url` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '外部リング URL',
+  `contents_hit` int(11) DEFAULT NULL COMMENT 'コンテンツの貸出数',
+  `contents_view` int(11) DEFAULT NULL COMMENT 'コンテンツの閲覧数',
+  `created` datetime NOT NULL COMMENT '登録日',
+  `updated` datetime NOT NULL COMMENT '更新日',
+  `contents_stat` char(1) COLLATE utf8_unicode_ci NOT NULL COMMENT '利用者ページ反映の可否',
+  `view_date` int(11) DEFAULT NULL COMMENT '公開期間設定',
+  `view_stat` int(1) NOT NULL COMMENT 'コンテンツ閲覧有無',
+  `contents_div` int(1) NOT NULL COMMENT '商用非商用区分',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='コンテンツ情報';
+
+
+CREATE TABLE `tblcontentscomments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tblcontents_id` int(11) NOT NULL COMMENT 'コンテンツリレージョン',
+  `user_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '利用者ＩＤ',
+  `content` text COLLATE utf8_unicode_ci NOT NULL COMMENT '内容',
+  `created` datetime NOT NULL COMMENT '登録日',
+  `updated` datetime NOT NULL COMMENT '更新日',
+  `reg_ip` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT '登録ＩＰ',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='コンテンツ別コメント情報';
+
+
+CREATE TABLE `tblcontentsinfos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tblcontents_id` int(11) NOT NULL COMMENT 'コンテンツ連番',
+  `contents_intro` text COLLATE utf8_unicode_ci COMMENT '内容の紹介',
+  `contents_author_intro` text COLLATE utf8_unicode_ci COMMENT '著者紹介',
+  `contents_table` text COLLATE utf8_unicode_ci COMMENT '目次',
+  `contents_review` text COLLATE utf8_unicode_ci COMMENT '書評',
+  `contents_detail_img1` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'コンテンツ詳細イメージ1',
+  `contents_detail_img2` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'コンテンツ詳細イメージ2',
+  `contents_detail_img3` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'コンテンツ詳細イメージ3',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='コンテンツ詳細情報';
+
+
+CREATE TABLE `tblcontentslends` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tblmambers_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '利用者ID',
+  `tblcontents_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'コンテンツ連番',
+  `lend_dt` datetime NOT NULL COMMENT '貸出日',
+  `return_dt` datetime NOT NULL COMMENT '返却日',
+  `extend_count` int(11) NOT NULL COMMENT '延長回数',
+  `created` datetime NOT NULL COMMENT '登録日',
+  `updated` datetime NOT NULL COMMENT '更新日',
+  `flag_os` char(1) COLLATE utf8_unicode_ci NOT NULL COMMENT 'OS種類',
+  `contents_order` int(11) NOT NULL COMMENT 'コンテンツ順番',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='コンテンツ貸出内訳';
+
+
+CREATE TABLE `tblcontentsreserve_alarms` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tblmember_id` int(11) NOT NULL COMMENT '利用者ID',
+  `tblcontents_id` int(11) NOT NULL COMMENT 'コンテンツID',
+  `flag` char(1) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created` datetime DEFAULT NULL COMMENT '登録日',
+  `updated` datetime DEFAULT NULL COMMENT '更新日',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='コンテンツ予約貸出情報';
+
+
+CREATE TABLE `tblcontentsreserves` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tblmamber_id` int(11) NOT NULL COMMENT '利用者ID',
+  `tblcontents_id` int(11) NOT NULL COMMENT 'コンテンツID',
+  `created` datetime NOT NULL COMMENT '登録日',
+  `updated` datetime NOT NULL COMMENT '更新日',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='コンテンツ予約情報';
+
+
+CREATE TABLE `tblcontentsurls` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tblcontents_id` int(11) NOT NULL COMMENT 'コンテンツID',
+  `viewer` char(1) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ビュアー種類',
+  `os` char(1) COLLATE utf8_unicode_ci NOT NULL COMMENT 'OS種類',
+  `browser` char(1) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ブラウザ種類',
+  `cont_url1` char(1) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'cont_url1',
+  `cont_url2` char(1) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'cont_url2',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='コンテンツURL情報';
+
+
+CREATE TABLE `tblcontentsviewlogs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tblmembers_id` int(11) NOT NULL COMMENT '利用者ID',
+  `tblcontents_id` int(11) NOT NULL COMMENT 'コンテンツID',
+  `view_dt` datetime NOT NULL COMMENT '利用日付',
+  `view_ip` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '利用IP',
+  `flag_os` char(50) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '閲覧ユーザエージェント',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='コンテンツ利用ログ';
+
+
+CREATE TABLE `tblfaqs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tblmembers_id` int(11) NOT NULL COMMENT '利用者ID',
+  `user_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '利用者名',
+  `subject` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'タイトル',
+  `memo` text COLLATE utf8_unicode_ci COMMENT '内容',
+  `created` datetime NOT NULL COMMENT '登録日',
+  `updated` datetime NOT NULL COMMENT '更新日',
+  `wip` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '作成者IP',
+  `use_pop` text COLLATE utf8_unicode_ci COMMENT 'ポップアップ表示の可否',
+  `view_count` int(11) DEFAULT NULL COMMENT '照会数',
+  `file` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '添付ファイル経路',
+  `file_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '添付ファイル名',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='FAQ情報';
+
+
+CREATE TABLE `tblfaqtreerelfaqs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tblfaqs_id` int(11) NOT NULL COMMENT 'FAQ登録用のカテゴリー連番',
+  `categpry_path` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'FAQ登録要のカテゴリー経路',
+  `created` datetime NOT NULL COMMENT '登録日',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='FAQ 登録用のFAQマッピング';
+
+
+CREATE TABLE `tblfaqtrees` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `category_cd` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'カテゴリーコード',
+  `category_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'カテゴリー名',
+  `category_path` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'カテゴリー経路',
+  `created` datetime NOT NULL COMMENT '登録日',
+  `updated` datetime NOT NULL COMMENT '更新日',
+  `etc` text COLLATE utf8_unicode_ci COMMENT '説明',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='FAQ登録用のカテゴリー';
+
+
+CREATE TABLE `tblloginlogs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `login_date` datetime NOT NULL COMMENT 'ログイン日付',
+  `remote_addr` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '利用者',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='利用者ログインのログ情報';
+
+
+CREATE TABLE `tblmaincontentsgroups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'グループ名',
+  `group_title_img` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'グループタイトル画像',
+  `group_state` char(1) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'グループ状況',
+  `is_use` char(1) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '使用可否',
+  `image_use` char(1) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'イメージ使用有無',
+  `text_bgcolor` varchar(7) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'タイトルの背景色',
+  `text_fontcolor` varchar(7) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'タイトルの文字色',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='メインページ表示のコンテンツグループ情報';
+
+
+CREATE TABLE `tblmaincontents` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_no` int(11) NOT NULL COMMENT 'グループ番号',
+  `contents_order` int(11) unsigned NOT NULL COMMENT 'コンテンツ位置の順番',
+  `tblcontents_id` int(11) NOT NULL COMMENT 'コンテンツID',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='メインページ表示のコンテンツ情報';
+
+
+CREATE TABLE `tblmembers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '利用者ID',
+  `user_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '利用者名',
+  `user_passwd` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'パスワード',
+  `user_birth` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '生年月日',
+  `user_hp` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '携帯電話番号',
+  `user_email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'メールアドレス',
+  `user_job` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '職業',
+  `tblcompanys_id` int(11) DEFAULT NULL COMMENT '出版社番号',
+  `user_stat` char(1) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'ログイン可否',
+  `created` datetime NOT NULL COMMENT '登録日',
+  `updated` datetime NOT NULL COMMENT '更新日',
+  `user_kind` char(5) COLLATE utf8_unicode_ci NOT NULL COMMENT '利用者タイプ',
+  `last_login_ip` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '最終ログインＩＰ',
+  `last_login_date` datetime DEFAULT NULL COMMENT '最終ログイン時刻',
+  `etc` text COLLATE utf8_unicode_ci COMMENT 'その他',
+  `start_dt` date DEFAULT NULL COMMENT '貸出期間開始',
+  `end_dt` date DEFAULT NULL COMMENT '貸出期間終了',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='コンテンツ情報';
+
+
+CREATE TABLE `tblnotifys` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tblmembers_id` int(11) NOT NULL COMMENT '利用者ＩＤ',
+  `user_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '利用者名',
+  `subject` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT 'タイトル',
+  `memo` text COLLATE utf8_unicode_ci COMMENT '内容',
+  `created` datetime NOT NULL COMMENT '登録日',
+  `updated` datetime NOT NULL COMMENT '更新日',
+  `wip` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '作成者IP',
+  `use_pop` char(1) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'お知らせポップアップの可否',
+  `view_count` int(11) DEFAULT NULL COMMENT '照会数',
+  `file` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '添付ファイル',
+  `date_check` int(1) DEFAULT NULL COMMENT '掲載期間 使用有無',
+  `start_date` date DEFAULT NULL COMMENT '掲載期間開始日',
+  `end_date` date DEFAULT NULL COMMENT '掲載期間終了日',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='お知らせ情報';
+
+
+CREATE TABLE `t_plugin` (
+  `PLU_ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'プラグインID',
+  `NAME` varchar(255) NOT NULL COMMENT '名前',
+  `DISP_NAME` varchar(255) NOT NULL COMMENT '表示名',
+  `FILE_NAME` varchar(255) NOT NULL COMMENT 'ファイル名',
+  `DESCRIPTION` text NOT NULL COMMENT '説明',
+  `AUTHOR` varchar(255) NOT NULL COMMENT '作成者',
+  `URL` varchar(255) NOT NULL COMMENT 'URL',
+  `DB` varchar(255) DEFAULT NULL COMMENT 'DB',
+  `NOT_STOP` int(11) NOT NULL DEFAULT '0' COMMENT 'ストップ',
+  `STATUS` int(11) NOT NULL COMMENT 'ステータス',
+  `INSERT_DATE` datetime NOT NULL COMMENT '登録日',
+  `LAST_UPDATE` datetime NOT NULL COMMENT '更新日',
+  `DEL_FLG` tinyint(1) NOT NULL COMMENT '削除日',
+  PRIMARY KEY (`PLU_ID`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='プラグイン情報';
+
+

@@ -1,0 +1,5 @@
+@CHARSET "UTF-8";
+/* 20160720追加 */
+ul#g-account-menu.dropdown-menu {
+	background-color: #2C3E50;
+}

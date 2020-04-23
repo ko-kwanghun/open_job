@@ -1,0 +1,18 @@
+<?php
+/**
+ * @copyright SoftWiz Corporation (http://www.icz.co.jp/)
+ * @license
+ * @author
+ * @version $Id$
+ */
+//DB接続
+Configure::write('DB_SETTING', array(
+	'driver' => 'mysql',
+	'persistent' => false,
+	'host' => '153.122.41.152',
+	'login' => 'softwiz',
+	'password' => 'softwiz123',
+	'database' => 'job',
+	'prefix' => '',
+	'encoding' => 'utf8',
+));
