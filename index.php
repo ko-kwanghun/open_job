@@ -1,4 +1,7 @@
 <?php
+
+branch002から追加
+
 /**
  * Requests collector.
  *
