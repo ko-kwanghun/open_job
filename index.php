@@ -53,3 +53,5 @@
 		define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
 	}
 	require APP_DIR . DS . WEBROOT_DIR . DS . 'index.php';
+
+masterから追加
